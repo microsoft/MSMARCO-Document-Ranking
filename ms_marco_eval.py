@@ -4,7 +4,7 @@ Command line:
 python msmarco_eval_ranking.py <path_to_candidate_file>
 
 Creation Date : 06/12/2018
-Last Modified : 08/06/2020
+Last Modified : 08/11/2020
 Authors : Daniel Campos <dacamp@microsoft.com>, Rutger van Haasteren <ruvanh@microsoft.com>
 """
 import sys
@@ -13,7 +13,7 @@ import statistics
 
 from collections import Counter
 
-MaxMRRRank = 10
+MaxMRRRank = 100
 
 def load_reference_from_stream(f):
     """Load Reference reference relevant document
@@ -43,6 +43,11 @@ def load_reference(path_to_reference):
         qids_to_relevant_documentids = load_reference_from_stream(f)
     return qids_to_relevant_documentids
 
+def validate_candidate_has_enough_ranking(qid_to_ranked_candidate_documents):
+    for qid in qid_to_ranked_candidate_documents:
+        if len(qid_to_ranked_candidate_documents[qid]) != MaxMRRRank:
+            print('Not enough documents ranked. Please Provide top 100 documents for qid:{}'.format(qid))
+
 def load_candidate_from_stream(f):
     """Load candidate data from a stream.
     Args:f (stream): stream to load.
@@ -59,13 +64,13 @@ def load_candidate_from_stream(f):
                 pass    
             else:
                 # By default, all PIDs in the list of 1000 are 0. Only override those that are given
-                tmp = [0] * 1000
-                qid_to_ranked_candidate_documents[qid] = tmp
-            qid_to_ranked_candidate_documents[qid][rank-1]=did
+                qid_to_ranked_candidate_documents[qid] = []
+            qid_to_ranked_candidate_documents[qid].append((did,rank))
         except:
             raise IOError('\"%s\" is not valid format' % l)
-    return qid_to_ranked_candidate_documents
-                
+    validate_candidate_has_enough_ranking(qid_to_ranked_candidate_documents)
+    print('Quantity of Documents ranked for each query is as expected. Evaluating')
+    return {qid: sorted(qid_to_ranked_candidate_documents[qid], key=lambda x:(x[1], x[0]), reverse=False) for qid in qid_to_ranked_candidate_documents}         
 def load_candidate(path_to_candidate):
     """Load candidate data from a file.
     Args:path_to_candidate (str): path to file to load.
@@ -118,13 +123,14 @@ def compute_metrics(qids_to_relevant_documentids, qids_to_ranked_candidate_docum
     MRR = 0
     qids_with_relevant_documents = 0
     ranking = []
+    
     for qid in qids_to_ranked_candidate_documents:
         if qid in qids_to_relevant_documentids and qid not in exclude_qids:
             ranking.append(0)
             target_pid = qids_to_relevant_documentids[qid]
             candidate_pid = qids_to_ranked_candidate_documents[qid]
             for i in range(0,MaxMRRRank):
-                if candidate_pid[i] in target_pid:
+                if candidate_pid[i][0] in target_pid:
                     MRR += 1/(i + 1)
                     ranking.pop()
                     ranking.append(i+1)
@@ -133,7 +139,7 @@ def compute_metrics(qids_to_relevant_documentids, qids_to_ranked_candidate_docum
         raise IOError("No matching QIDs found. Are you sure you are scoring the evaluation set?")
     
     MRR = MRR/len(qids_to_relevant_documentids)
-    all_scores['MRR @10'] = MRR
+    all_scores['MRR @100'] = MRR
     all_scores['QueriesRanked'] = len(set(qids_to_ranked_candidate_documents)-exclude_qids)
     return all_scores
                 
