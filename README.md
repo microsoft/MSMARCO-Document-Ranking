@@ -13,7 +13,7 @@ For more information about [TREC 2019 Deep Learning](https://github.com/microsof
 
 For more information about [Q&A](https://github.com/microsoft/MSMARCO-Question-Answering)
 
-For more information about [Ranking](https://github.com/microsoft/MSMARCO-Passage-Ranking)
+For more information about [Passage Ranking](https://github.com/microsoft/MSMARCO-Passage-Ranking) 
 
 For more information about [Keyphrase Extraction](https://github.com/microsoft/MSMARCO-OpenKP)
 
@@ -34,9 +34,9 @@ What is the difference between MSMARCO and other MRC datasets? We believe the ad
 To Download the MSMARCO Dataset please navigate to [msmarco.org](http://www.msmarco.org/dataset.aspx) and agree to our Terms and Conditions. If there is some data you think we are missing and would be useful please open an issue.
 
 # Ranking Task
-MS MARCO(Microsoft Machine Reading Comprehension) is a large scale dataset focused on machine reading comprehension, question answering, and passage ranking. A variant of this task will be the part of [TREC](https://trec.nist.gov/) and [AFIRM 2019](http://sigir.org/afirm2019/). For Updates about [TREC 2019](https://github.com/dfcf93/DeepLearningTREC2019) please follow [This Repository](https://github.com/dfcf93/DeepLearningTREC2019)
-## Passage Reranking task Task
-Given a query q and a the 1000 most relevant passages P = p1, p2, p3,... p1000, as retrieved by BM25 a succeful system is expected to rerank the most relevant passage as high as possible. For this task not all 1000 relevant items have a human labeled relevant passage. Evaluation will be done using [MRR](https://en.wikipedia.org/wiki/Mean_reciprocal_rank)
+MS MARCO(Microsoft Machine Reading Comprehension) is a large scale dataset focused on machine reading comprehension, question answering, and passage ranking. A variant of this task will be the part of [TREC](https://trec.nist.gov/).
+## Document Reranking task Task
+Given a query q and a the 100 most relevant documents D = d1, d2, d3,..., d100, as retrieved by BM25 a succeful system is expected to rerank the most relevant passage as high as possible.  Evaluation will be done using [MRR](https://en.wikipedia.org/wiki/Mean_reciprocal_rank) @100.
 ### Generation
 To generate the ranking task dataset we started with the regular MSMARCO dataset which means if people want to generate any data in a different format they are more than able to(and even provide us with suggestions!). We are hoping to open source our production code shortly so people can generate the sets for themselves(with any normalization they may find interesting). 
 
