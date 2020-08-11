@@ -1,4 +1,4 @@
-# MSMARCO
+# MSMARCO Document Ranking
 OFFICIAL WEBPAGE IS [https://microsoft.github.io/msmarco/](https://microsoft.github.io/msmarco/)
 A Family of datasets built using technology and Data from Microsoft's Bing.
 
@@ -21,6 +21,40 @@ For more information about [Conversational Search](https://github.com/microsoft/
 
 For more information about [Polite Crawling](https://github.com/microsoft/MSMARCO-Optimal-Freshness-Crawl-Under-Politeness-Constraints)
 
+## Document Ranking Task
+
+The first task focuses on document ranking. We have two subtasks related to this: Full ranking and top-100 re-ranking.
+
+In the full ranking (retrieval) subtask, you are expected to rank documents based on their relevance to the question, where documents can be retrieved from the full document collection provided. You can submit up to 1000 documents for this task. It models a scenario where you are building an end-to-end retrieval system.
+
+In the re-ranking subtask, we provide you with an initial ranking of 100 documents from a simple IR system, and you are expected to re-rank the documents in terms of their relevance to the question. This is a very common real-world scenario, since many end-to-end systems are implemented as retrieval followed by top-k re-ranking. The re-ranking subtask allows participants to focus on re-ranking only, without needing to implement an end-to-end system. It also makes those re-ranking runs more comparable, because they all start from the same set of 100 candidates.
+
+### Use of external information
+
+You are allowed to use external information while developing your runs. When you submit your runs, please fill in a form listing what evidence you used, for example an external corpus such as Wikipedia or a pre-trained model (e.g. word embeddings).
+
+When submitting runs, participants will be able to indicate what resources they used. This could include the provided set of document ranking training data, but also optionally other data such as the passage ranking task labels or external labels or pretrained models. This will allow us to analyze the runs and break they down into types.
+
+IMPORTANT NOTE: It is prohibited to use evidence from the MS-MARCO Question Answering task in your submission. That dataset reveals some minor details of how the MS MARCO dataset was constructed that would not be available in a real-world search engine; hence, should be avoided.
+
+### Datasets
+
+This year we have a document ranking dataset and a passage ranking dataset. The two datasets will share the same set of test queries, which will be released later.
+
+#### Document ranking dataset
+
+The document ranking dataset is based on source documents, which contained passages in the passage task. Although we have an incomplete set of documents that was gathered some time later than the passage data, the corpus is 3.2 million documents and our training set has 367,013 queries. For each training query, we map from a positive passage ID to the corresponding document ID in our 3.2 million. We do so on the assumption that a document that produced a relevant passage is usually a relevant document.
+
+| Type   | Filename                                                                                                              | File size |              Num Records | Format                                                         |
+|--------|-----------------------------------------------------------------------------------------------------------------------|----------:|-------------------------:|----------------------------------------------------------------|
+| Corpus | [msmarco-docs.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docs.tsv.gz)                          |     22 GB |               3,213,835  | tsv: docid, url, title, body                                   |
+| Corpus | [msmarco-docs-lookup.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docs-lookup.tsv.gz)            |    101 MB |               3,213,835  | tsv: docid, offset_trec, offset_tsv                            |
+| Train  | [msmarco-doctrain-queries.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-doctrain-queries.tsv.gz)  |     15 MB |                 367,013  | tsv: qid, query                                                |
+| Dev    | [msmarco-docdev-queries.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docdev-queries.tsv.gz)      |    216 KB |                   5,193  | tsv: qid, query                                                |
+| Dev    | [msmarco-docdev-top100](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docdev-top100.gz)        |       27 MB |                     519,300  | TREC submission: qid, "Q0", docid, rank, score, runstring      |
+| Dev    | [msmarco-docdev-qrels.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docdev-qrels.tsv.gz)          |    112 KB |                   5,478  | TREC qrels format                                              |
+| collection    | [docleaderboard-queries.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-test2019-queries.tsv.gz)          |     124K |                   5793  | tsv: qid, query                                              |
+| Test    | [docleaderboard-top100](https://msmarco.blob.core.windows.net/msmarcoranking/docleaderboard-top100.tsv.gz)          |   2.9M |                  579300  | TREC submission: qid, "Q0", docid, rank, score, runstring       |
 
 ## Dataset Generation, Data Format, And Statistics
 What is the difference between MSMARCO and other MRC datasets? We believe the advantages that are special to MSMARCO are:
@@ -31,10 +65,10 @@ What is the difference between MSMARCO and other MRC datasets? We believe the ad
 - Dataset Size: At over 1 million queries the dataset is large enough to train the most complex systems and also sample the data for specific applications.
 
 ## Download the Dataset
-To Download the MSMARCO Dataset please navigate to [msmarco.org](http://www.msmarco.org/dataset.aspx) and agree to our Terms and Conditions. If there is some data you think we are missing and would be useful please open an issue.
+To Download the MSMARCO Dataset please navigate to [msmarco.org](https://microsoft.github.io/msmarco/) and agree to our Terms and Conditions. If there is some data you think we are missing and would be useful please open an issue.
 
 # Ranking Task
-MS MARCO(Microsoft Machine Reading Comprehension) is a large scale dataset focused on machine reading comprehension, question answering, and passage ranking. A variant of this task will be the part of [TREC](https://trec.nist.gov/).
+MS MARCO(Microsoft Machine Reading Comprehension) is a large scale dataset focused on machine reading comprehension, question answering, and document/passage ranking. A variant of this task will be the part of [TREC](https://trec.nist.gov/).
 ## Document Reranking task Task
 Given a query q and a the 100 most relevant documents D = d1, d2, d3,..., d100, as retrieved by BM25 a succeful system is expected to rerank the most relevant passage as high as possible.  Evaluation will be done using [MRR](https://en.wikipedia.org/wiki/Mean_reciprocal_rank) @100.
 ### Generation
@@ -51,18 +85,6 @@ Finally, understanding that this ranking data may not be useful to train a Deep 
 ### Data, information, and Formating
 Given that all files have been generated from the v2.1 dataset meaning that in theory anyone can generate the files we provide to their own specifications and liking.
 
-| Description                                           | Filename                                                                                                                | File size |                        Num Records | Format                                                         |
-|-------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|----------:|-----------------------------------:|----------------------------------------------------------------|
-| Collection                                | [collection.tar.gz](https://msmarco.blob.core.windows.net/msmarcoranking/collection.tar.gz)                             |    2.9 GB |                         8,841,823  | tsv: pid, passage |
-| Queries                                   | [queries.tar.gz](https://msmarco.blob.core.windows.net/msmarcoranking/queries.tar.gz)                                   |   42.0 MB |                         1,010,916  | tsv: qid, query |
-| Qrels Dev                                 | [qrels.dev.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/qrels.dev.tsv)                                     |    1.1 MB |                            59,273  | TREC qrels format |
-| Qrels Train                               | [qrels.train.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/qrels.train.tsv)                                 |   10.1 MB |                           532,761  | TREC qrels format |
-| Queries, Passages, and Relevance   Labels | [collectionandqueries.tar.gz](https://msmarco.blob.core.windows.net/msmarcoranking/collectionandqueries.tar.gz)         |    2.9 GB |                        10,406,754  | |
-| Train Triples Small                       | [triples.train.small.tar.gz](https://msmarco.blob.core.windows.net/msmarcoranking/triples.train.small.tar.gz)           |   27.1 GB |                        39,782,779  | tsv: query, positive passage, negative passage |
-| Train Triples Large                      | [triples.train.full.tsv.gz](https://msmarco.blob.core.windows.net/msmarcoranking/triples.train.full.tsv.gz)             |  272.2 GB |                       397,756,691  | tsv: query, positive passage, negative passage |
-| Train Triples QID PID Format               | [qidpidtriples.train.full.tsv.gz](https://msmarco.blob.core.windows.net/msmarcoranking/qidpidtriples.train.full.tsv.gz) |    5.7 GB |                       269,919,004  | tsv: qid, positive pid, negative pid |
-| Top 1000 Train                            | [top1000.train.tar.gz](https://msmarco.blob.core.windows.net/msmarcoranking/top1000.train.tar.gz)                       |  175.0 GB |                       478,016,942  | tsv: qid, pid, query, passage |
-| Top 1000 Dev                              | [top1000.dev.tar.gz](https://msmarco.blob.core.windows.net/msmarcoranking/top1000.dev.tar.gz)                           |    2.4 GB |                         6,669,195  | tsv: qid, pid, query, passage |
 #### Full Documents.
 The initial MSMARCO dataset included 3.5m urls from which the 8.8m passages were extracted. In March 2018 these urls were scraped and a clean textual representation was created. Due to the time delay many of the domains did not exist and thus we could only product 3.2m documents. These documents can be found in a tsv format that had been cleaned up and optimized for document retrieval and a jsonl format which is mostly for embedding training. The TSV is called []() and format is URL\tTitle\tContent. [TSV](https://msmarco.blob.core.windows.net/msmarcoranking/fulldocs.tsv.gz) and [JSONl](https://msmarco.blob.core.windows.net/msmarcoranking/fulldocuments.jsonl.gz). 
 ````
@@ -74,16 +96,6 @@ http://childparenting.about.com/od/physicalemotionalgrowth/tp/Child-Development-
 
 
 
-#### Passage to PassageID
-This file contains each unique Passage in the larger MSMARCO dataset. Format is PID\tPassage and the file is collection.tsv. It can be found [Here](https://msmarco.blob.core.windows.net/msmarcoranking/collectionandqueries.tar.gz)
-````
-7	Manhattan Project. The Manhattan Project was a research and development undertaking during World War II that produced the first nuclear weapons. It was led by the United States with the support of the United Kingdom and Canada. From 1942 to 1946, the project was under the direction of Major General Leslie Groves of the U.S. Army Corps of Engineers. Nuclear physicist Robert Oppenheimer was the director of the Los Alamos Laboratory that designed the actual bombs. The Army component of the project was designated the
-8	In June 1942, the United States Army Corps of Engineersbegan the Manhattan Project- The secret name for the 2 atomic bombs.
-9	One of the main reasons Hanford was selected as a site for the Manhattan Project's B Reactor was its proximity to the Columbia River, the largest river flowing into the Pacific Ocean from the North American coast.
-````
-Size info
-````
-8841823 collection.tsv
 ````
 #### Query to QueryID
 This has been split for Train, Dev and Eval. These sets include all queries including those which do not have answers. If queries with no answer were removed the sets would be around 35% smaller. To avoid having extremely large submissions we have subset the dev and eval portions to be ~1/8 of the QnA set. In other words the dev and eval set are ~6800 queries instead of the full 55,000. To find only the queries associated with the public sets use the queries.dev.small.tsv and queries.eval.small.tsv. There are 5 files and they can be found inside [Here](https://msmarco.blob.core.windows.net/msmarcoranking/collectionandqueries.tar.gz)
@@ -99,13 +111,7 @@ This has been split for Train, Dev and Eval. These sets include all queries incl
 570009	what are the four major groups of elements
 492875	sanitizer temperature
 ````
-Size info
-````
-  101093 queries.dev.tsv
-  101092 queries.eval.tsv
-  808731 queries.train.tsv
- 1010916 total
-````
+
 #### Top1000
 These files are split between train, dev, and eval. For each query there are ~1000 passages which were retrived by BM25 from the 8.8m collection. The train set contains all examples(~550,000 queries) but to make evaluation faster we have segmented the dev and eval file to be 1/8 of the full size. In other words, dev and eval are ~6800 queries out of the 55000 possible. [Dev](https://msmarco.blob.core.windows.net/msmarcoranking/top1000.dev.tar.gz),[Eval](https://msmarco.blob.core.windows.net/msmarcoranking/top1000.eval.tar.gz), and [Train](https://msmarco.blob.core.windows.net/msmarcoranking/top1000.train.tar.gz)
 ````
