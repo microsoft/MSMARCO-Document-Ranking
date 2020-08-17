@@ -51,10 +51,10 @@ The document ranking dataset is based on source documents, which contained passa
 | Corpus | [msmarco-docs-lookup.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docs-lookup.tsv.gz)            |    101 MB |               3,213,835  | tsv: docid, offset_trec, offset_tsv                            |
 | Train  | [msmarco-doctrain-queries.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-doctrain-queries.tsv.gz)  |     15 MB |                 367,013  | tsv: qid, query                                                |
 | Dev    | [msmarco-docdev-queries.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docdev-queries.tsv.gz)      |    216 KB |                   5,193  | tsv: qid, query                                                |
-| Dev    | [msmarco-docdev-top100](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docdev-top100.gz)        |       27 MB |                     519,300  | TREC submission: qid, "Q0", docid, rank, score, runstring      |
+| Dev    | [msmarco-docdev-top100](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docdev-top100.gz)        |       27 MB |                     5,193  | TREC submission: qid, "Q0", docid, rank, score, runstring      |
 | Dev    | [msmarco-docdev-qrels.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-docdev-qrels.tsv.gz)          |    112 KB |                   5,478  | TREC qrels format                                              |
-| Test    | [docleaderboard-queries.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/docleaderboard-queries.tsv.gz)          |     124K |                   5793  | tsv: qid, query                                              |
-| Test    | [docleaderboard-top100](https://msmarco.blob.core.windows.net/msmarcoranking/docleaderboard-top100.tsv.gz)          |   2.9M |                  579300  | TREC submission: qid, "Q0", docid, rank, score, runstring       |
+| Test    | [docleaderboard-queries.tsv](https://msmarco.blob.core.windows.net/msmarcoranking/docleaderboard-queries.tsv.gz)          |     124K |                   5,793  | tsv: qid, query                                              |
+| Test    | [docleaderboard-top100](https://msmarco.blob.core.windows.net/msmarcoranking/docleaderboard-top100.tsv.gz)          |   2.9M |                  579,300  | TREC submission: qid, "Q0", docid, rank, score, runstring       |
 
 ## Dataset Generation, Data Format, And Statistics
 What is the difference between MSMARCO and other MRC datasets? We believe the advantages that are special to MSMARCO are:
