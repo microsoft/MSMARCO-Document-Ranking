@@ -45,8 +45,8 @@ def load_reference(path_to_reference):
 
 def validate_candidate_has_enough_ranking(qid_to_ranked_candidate_documents):
     for qid in qid_to_ranked_candidate_documents:
-        if len(qid_to_ranked_candidate_documents[qid]) != MaxMRRRank:
-            print('Not enough documents ranked. Please Provide top 100 documents for qid:{}'.format(qid))
+        if len(qid_to_ranked_candidate_documents[qid]) > MaxMRRRank:
+            print('Too many documents ranked. Please Provide top 100 documents for qid:{}'.format(qid))
 
 def load_candidate_from_stream(f):
     """Load candidate data from a stream.
@@ -129,7 +129,7 @@ def compute_metrics(qids_to_relevant_documentids, qids_to_ranked_candidate_docum
             ranking.append(0)
             target_pid = qids_to_relevant_documentids[qid]
             candidate_pid = qids_to_ranked_candidate_documents[qid]
-            for i in range(0,MaxMRRRank):
+            for i in range(0,len(candidate_pid)):
                 if candidate_pid[i][0] in target_pid:
                     MRR += 1/(i + 1)
                     ranking.pop()
