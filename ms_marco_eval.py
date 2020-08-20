@@ -4,7 +4,7 @@ Command line:
 python msmarco_eval_ranking.py <path_to_candidate_file>
 
 Creation Date : 06/12/2018
-Last Modified : 08/11/2020
+Last Modified : 08/06/2020
 Authors : Daniel Campos <dacamp@microsoft.com>, Rutger van Haasteren <ruvanh@microsoft.com>
 """
 import sys
@@ -56,10 +56,10 @@ def load_candidate_from_stream(f):
     qid_to_ranked_candidate_documents = {}
     for l in f:
         try:
-            l = l.strip().split(' ')
+            l = l.strip().split('\t')
             qid = int(l[0])
-            did = l[2]
-            rank = int(l[3])
+            did = l[1]
+            rank = int(l[2])
             if qid in qid_to_ranked_candidate_documents:
                 pass    
             else:
@@ -188,17 +188,19 @@ def load_exclude(path_to_exclude_folder):
 
 def main():
     """Command line:
-    python msmarco_eval_ranking.py <path_to_candidate_file> <path_to_reference_file> <queries_to_exclude>
+    python document_ranking.py <path_to_candidate_file> <path_to_reference_file> <queries_to_exclude>
     """
     if len(sys.argv) == 1:
-        print("Usage:  python msmarco_eval_ranking.py <path_to_candidate_file> <path_to_reference_file> <queries_to_exclude>")
+        #print("Usage:  document_ranking.py <path_to_candidate_file> <path_to_reference_file> <queries_to_exclude>") for public version
+        print("Usage:  document_ranking.py <path_to_candidate_file> ")
     else:
         if len(sys.argv) == 3:
             exclude_qids = set()
-        else:
-            exclude_qids = load_exclude(sys.argv[3])
+        elif len(sys.argv) == 1:
+            exclude_qids = load_exclude(sys.argv[3]) #Public implementation
+        exclude_qids = load_exclude('exclude/')
         path_to_candidate = sys.argv[1]
-        path_to_reference = sys.argv[2]
+        path_to_reference = 'docleaderboard-qrels.tsv'
         metrics = compute_metrics_from_files(path_to_reference, path_to_candidate, exclude_qids)
         print('#####################')
         for metric in sorted(metrics):
