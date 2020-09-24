@@ -159,7 +159,7 @@ what fruit is native to australia       Passiflora herbertiana. A rare passion f
 ````
 
 ### Evaluation
-Evaluation of systems will be done using MRR@10. We have selected such a low MRR number because the sizes of files candidates need to create quickly balloon with each additional depth. Official evaluation scripts is [Here](https://github.com/dfcf93/MSMARCOV2/blob/master/Ranking/Baselines/msmarco_eval.py).
+Evaluation of systems will be done using MRR@10. We have selected such a low MRR number because the sizes of files candidates need to create quickly balloon with each additional depth. Official evaluation scripts is [Here](https://github.com/microsoft/MSMARCO-Document-Ranking/blob/main/ms_marco_eval.py).
 
 Expected format for your submission is a file including qid\tpid\trank for each query/top 1000 in the eval file on the website. To minimize space feel free to only inclde the top 100 or 10 passages.
 ````
