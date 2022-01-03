@@ -1,3 +1,6 @@
+To participate in the MS MARCO Document Ranking leaderboard, please go here: https://microsoft.github.io/msmarco/Submission.
+
+<!---
 # MSMARCO Document Ranking
 OFFICIAL WEBPAGE IS [https://microsoft.github.io/msmarco/](https://microsoft.github.io/msmarco/)
 A Family of datasets built using technology and Data from Microsoft's Bing.
@@ -222,3 +225,4 @@ Privacy information can be found at https://privacy.microsoft.com/en-us/
 
 Microsoft and any contributors reserve all other rights, whether under their respective copyrights, patents,
 or trademarks, whether by implication, estoppel or otherwise.
+-->
